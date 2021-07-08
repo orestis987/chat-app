@@ -9,7 +9,7 @@ const server = http.createServer(app)
 const io = socketio(server)
 const Filter = require('bad-words')
 
-const port = process.env.PORT || 3012
+const port = process.env.PORT || 3050
 const publicDirectoryPath = path.join(__dirname,'../public')
 app.use(express.static(publicDirectoryPath))
 
