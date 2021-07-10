@@ -10,10 +10,26 @@ const $messages = document.querySelector('#messages')
 
 //message template
 const messageTemplate = document.querySelector('#message-template').innerHTML
+const locationTemplate = document.querySelector('#location-template').innerHTML
+
+//Options
+const {username, room} = Qs.parse(location.search, {ignoreQuerPrefix: true})
 
 socket.on('message', (msg)=> {
     console.log(msg)
-    const html = Mustache.render(messageTemplate, { msg } )
+    const html = Mustache.render(messageTemplate, { 
+        msg: msg.text,
+        createdAt: moment(msg.createdAt).format('h:mm a')
+    })
+    $messages.insertAdjacentHTML('beforeend', html)
+})
+
+socket.on('locationMessage', (locationUrl)=> {
+    console.log(locationUrl)
+    const html = Mustache.render(locationTemplate, {
+        url: locationUrl.url,
+        createdAt: moment(locationUrl.createdAt).format('h:mm a')
+    })
     $messages.insertAdjacentHTML('beforeend', html)
 })
 
@@ -62,5 +78,7 @@ $sendLocationButton.addEventListener('click', ()=> {
     } )
 })
 
+
+socket.emit('join', {username, room})
 
 //https://www.google.com/maps?q=0,0
